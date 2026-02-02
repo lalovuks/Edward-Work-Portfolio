@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edward Mavungah - Web Developer & Digital Solutions</title>
+    <meta name="description" content="Edward Mavungah - WordPress Developer specializing in custom web apps, AWS deployment, and digital solutions">
+    <link rel="icon" type="image/png" href="ED DEV.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ffcc;
+            --secondary: #ff00ff;
+            --accent: #ffcc00;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --glow: rgba(0, 255, 204, 0.6);
+            --glow-pink: rgba(255, 0, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--darker);
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor - Unique Neon Circle */
+        .cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            mix-blend-mode: difference;
+        }
+
+        .cursor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        .cursor.hover {
+            width: 60px;
+            height: 60px;
+            border-color: var(--secondary);
+            animation: cursorPulse 0.8s ease-in-out infinite;
+        }
+
+        .cursor.hover::before {
+            background: var(--secondary);
+            box-shadow: 0 0 15px var(--glow-pink);
+        }
+
+        @keyframes cursorPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Loading Bar */
+        .load-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            z-index: 9999;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        /* Particle Canvas */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, var(--darker) 0%, #0f0f1a 50%, var(--dark) 100%);
+        }
+
+        /* Video Background with Overlay */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            opacity: 0.15;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 1200px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1.2s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-container {
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInScale 1s ease-out 0.3s forwards;
+        }
+
+        @keyframes fadeInScale {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .logo-container img {
+            width: 150px;
+            height: 150px;
+            filter: drop-shadow(0 0 30px var(--glow));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .eyebrow {
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            text-shadow: none;
+        }
+
+        h1::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+
+        .lead {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out 0.8s forwards;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0;
+        }
+
+        .social-btn:hover {
+            color: var(--dark);
+            box-shadow: 0 0 30px var(--glow);
+            transform: translateY(-3px);
+        }
+
+        .social-btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .social-btn.github {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .social-btn.github::before {
+            background: var(--secondary);
+        }
+
+        .social-btn.github:hover {
+            box-shadow: 0 0 30px var(--glow-pink);
+        }
+
+        .social-btn.email {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .social-btn.email::before {
+            background: var(--accent);
+        }
+
+        .social-btn.email:hover {
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.6);
+        }
+
+        .social-btn svg {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .social-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Transparent Divs with Glowing Text */
+        .card {
+            background: rgba(10, 10, 15, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 5rem auto;
+            max-width: 1200px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(100px) rotateX(10deg);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .card__content h2, .card__content h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            text-shadow: 0 0 15px var(--glow);
+            margin: 2rem 0 1rem;
+        }
+
+        .card__content p {
+            line-height: 1.8;
+            margin: 1rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card__content strong {
+            color: var(--accent);
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+        }
+
+        .card__content ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .card__content ul li {
+            padding: 0.5rem 0 0.5rem 2rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .card__content ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .card__media {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .card__media img {
+            max-width: 300px;
+            width: 100%;
+            filter: drop-shadow(0 0 30px var(--glow));
+            border-radius: 15px;
+        }
+
+        /* Projects Section */
+        .projects-section {
+            padding: 5rem 2rem;
+            position: relative;
+            margin-top: 0;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            text-align: center;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 1rem auto;
+            box-shadow: 0 0 15px var(--glow);
+        }
+
+        .project-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            gap: 3rem;
+        }
+
+        .project-card {
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: transform, opacity;
+        }
+
+        .project-card:nth-child(even) {
+            transform: translateX(100px);
+            grid-template-columns: 1fr 300px;
+        }
+
+        .project-card:nth-child(even) .project-image {
+            order: 2;
+        }
+
+        .project-card:nth-child(even) .project-info {
+            order: 1;
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.05), rgba(0, 255, 204, 0.05));
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover::before {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.15), rgba(0, 255, 204, 0.15));
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            filter: brightness(0.8) contrast(1.2);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-image {
+            filter: brightness(1) contrast(1.3);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--glow-pink);
+        }
+
+        .project-info h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            text-shadow: 0 0 10px var(--glow-pink);
+            margin-bottom: 1rem;
+        }
+
+        .project-info p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .project-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .project-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .project-btn:hover {
+            color: var(--dark);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .project-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .project-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(30px);
+            margin: 5rem 0;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+            border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .cta-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1.5rem 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 255, 204, 0.3);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 255, 204, 0.5);
+        }
+
+        .cta-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .cursor {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+
+            .project-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .project-card:nth-child(even) {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card:nth-child(even) .project-image,
+            .project-card:nth-child(even) .project-info {
+                order: initial;
+            }
+
+            .card {
+                padding: 2rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .social-btn {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .card {
+                margin: 3rem 1rem;
+            }
+
+            .projects-section {
+                padding: 3rem 1rem;
+            }
+
+            .social-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Scroll Snap for Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Bar -->
+    <div class="load-bar" id="loadBar"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Particle Canvas Background -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline preload="auto">
+            <source src="Personal Background Webm.webm" type="video/webm">
+            <source src="Personal Background Ed.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <img src="ED DEV.png" alt="Edward Mavungah Logo">
+                </div>
+                <div class="eyebrow">Presented By</div>
+                <h1 data-text="EDWARD MAVUNGAH">EDWARD MAVUNGAH</h1>
+                <p class="lead"><strong>lalomav711@gmail.com</strong></p>
+                
+                <!-- Social Links -->
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/edward-mavungah-621036302" class="social-btn linkedin" target="_blank" rel="noopener">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                        <span>LinkedIn</span>
+                    </a>
+                    
+                    <a href="https://github.com/lalovuks" class="social-btn github" target="_blank" rel="noopener">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                    
+                    <a href="mailto:lalovuks711@gmail.com" class="social-btn email">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>Email</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="card" data-parallax="0.5">
+            <div class="card__media">
+                <img src="ED DEV.png" alt="Edward Mavungah Developer">
+            </div>
+            <div class="card__content">
+                <h2>About Me</h2>
+                <p>
+    I am a <strong>Junior Cloud Security Engineer</strong> with a strong foundation in 
+    <strong>web development, cloud infrastructure, and security-focused deployments</strong>. 
+    I began my career as a <strong>WordPress and Full-Stack Web Developer</strong>, building 
+    scalable websites and custom web applications using <strong>HTML, CSS, JavaScript, and Python</strong>.
+    This hands-on experience has given me a deep understanding of how applications are built, deployed, 
+    and exposed to real-world security risks.
+</p>
+
+<p>
+    I have experience deploying and managing applications on <strong>Amazon Web Services (AWS)</strong> 
+    and other hosting platforms, with a focus on <strong>secure configurations, access control, and performance</strong>. 
+    My background in <strong>SEO, digital marketing, and analytics</strong> allows me to approach security 
+    with a business-minded perspective—understanding not only how systems work, but how vulnerabilities 
+    impact availability, reputation, and revenue.
+    <br><br>
+    I am actively developing my expertise in <strong>cloud security, automation, and DevSecOps practices</strong>, 
+    and I am highly motivated to grow into a security-focused engineering role where secure design and 
+    continuous improvement are core priorities.
+</p>
+
+<h3>Core Skills & Technical Competencies</h3>
+<ul>
+    <li>Cloud Platforms: Working knowledge of <strong>AWS</strong> (EC2, IAM, S3, VPC) and exposure to Azure & GCP</li>
+    <li>Networking Fundamentals: <strong>VPCs, subnets, routing tables, security groups, firewalls</strong></li>
+    <li>Operating Systems: <strong>Linux administration</strong> and command-line proficiency</li>
+    <li>Web & Application Security Awareness: Secure coding principles and deployment best practices</li>
+    <li>Scripting & Automation: <strong>Python and Bash</strong> for task automation and security workflows</li>
+    <li>Infrastructure as Code (IaC): Familiarity with <strong>Terraform</strong> for provisioning cloud resources</li>
+    <li>Containerization: Basic knowledge of <strong>Docker</strong> and container security concepts</li>
+    <li>CI/CD Pipelines: Exposure to <strong>Jenkins and GitLab CI</strong> deployment pipelines</li>
+    <li>Identity & Access Management (IAM): User roles, permissions, and least-privilege access</li>
+    <li>Web Development: WordPress development, custom web apps, HTML, CSS, JavaScript</li>
+    <li>SEO & Digital Marketing: Traffic optimization, analytics, and conversion-driven design</li>
+    <li>Graphic Design & Content Creation</li>
+</ul>
+
+<h3>Professional Development & Learning Path</h3>
+<ul>
+    <li><strong>CISSP</strong> – Building a strong foundation in enterprise security principles</li>
+    <li><strong>TensorFlow</strong> – Applying machine learning concepts to security and data analysis</li>
+    <li><strong>PyTorch</strong> – Advanced ML workflows and model development</li>
+</ul>
+
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="projects-section">
+            <h2 class="section-title">FEATURED PROJECTS</h2>
+            
+            <div class="project-grid">
+                <!-- Agriculture Business Link -->
+                <div class="project-card">
+                    <img src="abl 1.png" alt="Agriculture Business Link" class="project-image">
+                    <div class="project-info">
+                        <h4>AGRICULTURE BUSINESS LINK</h4>
+                        <p>At <strong>Agriculture Business Link</strong>, we leverage technology to maximize networking and productivity in the agricultural sector. Our mission is to 
+                        <strong>educate, motivate and empower</strong> individuals with the knowledge and skills to grow their own food at home or launch their own agricultural ventures. 
+                        Through <strong>creativity, practical education and innovative software solutions</strong>, we make agriculture accessible, actionable and profitable for everyone.</p>
+                        <a href="https://agriculturebusiness.link" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Garden Calculator -->
+                <div class="project-card">
+                    <img src="gc1.png" alt="Garden Calculator" class="project-image">
+                    <div class="project-info">
+                        <h4>Garden Calculator</h4>
+                        <p>This Project Is Aimed at helping farmers to calculate their potential input and output before actually spending a single cent. 
+                        The calculator allows Users to enter the size of their Gardens or fields & allows them to calculate the amount of resources that they can expect to use and 
+                        how much they can expect to harvest based on carefully calculated estimates of the crops general performance.</p>
+                        <a href="https://garden-calc-refined.vercel.app/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Lalo Web Agency -->
+                <div class="project-card">
+                    <img src="LWAF.png" alt="Lalo Web Agency" class="project-image">
+                    <div class="project-info">
+                        <h4>Web Design Agency - LaloWebAgency</h4>
+                        <p>This Project allows me to Interact with clients globally in order to build them practical & systematic solutions to their business operations.
+                        The websites I design help the clients business to increase revenue & sales even publicity because they are well integrated into social platforms that are optimized for Marketing!</p>
+                        <a href="https://www.lalowebagency.biz/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ABL Coded Design -->
+                <div class="project-card">
+                    <img src="abl 1.png" alt="ABL Coded Design" class="project-image">
+                    <div class="project-info">
+                        <h4>ABL Custom Designed & Coded Website</h4>
+                        <p>A showcase of custom-coded design excellence with attention to detail in every pixel. This project demonstrates the perfect marriage of creative vision and sound effects in modern web development.</p>
+                        <a href="https://abl-coded-design-76yg.vercel.app/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hypest Website -->
+                <div class="project-card">
+                    <img src="hp1.png" alt="Hypest Website" class="project-image">
+                    <div class="project-info">
+                        <h4>Hypest Website</h4>
+                        <p>A cutting-edge web experience featuring stunning parallax effects and immersive scrolling mechanics. Built with modern frameworks to deliver smooth, engaging interactions that captivate visitors from the first scroll.</p>
+                        <a href="https://hypest-website.vercel.app/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Parallax Mechanic -->
+                <div class="project-card">
+                    <img src="mp1.png" alt="Parallax Mechanic" class="project-image">
+                    <div class="project-info">
+                        <h4>Parallax Mechanic</h4>
+                        <p>An innovative demonstration of advanced parallax scrolling techniques. This project showcases depth, motion, and visual storytelling through layered animations that respond dynamically to user interaction.</p>
+                        <a href="https://parallax-mechanic.pages.dev/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hypest Platform -->
+                <div class="project-card">
+                    <img src="hp2.png" alt="Hypest Platform" class="project-image">
+                    <div class="project-info">
+                        <h4>Hypest Platform</h4>
+                        <p>A sleek, performance-driven web application with emphasis on user experience and visual appeal. Combining minimalist design principles with powerful functionality for seamless digital interactions.</p>
+                        <a href="https://hypest.vercel.app/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ABL with Sound Effects -->
+                <div class="project-card">
+                    <img src="abl 2.png" alt="ABL with Sound Effects" class="project-image">
+                    <div class="project-info">
+                        <h4>ABL with Sound Effects</h4>
+                        <p>Experience agriculture innovation with immersive audio feedback. This version of ABL integrates custom sound effects that enhance user engagement and create a memorable interactive experience.</p>
+                        <a href="https://abl-coded-design.vercel.app/index.html" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Chicken Profit Calculator -->
+                <div class="project-card">
+                    <img src="pc1.png" alt="Chicken Profit Calculator" class="project-image">
+                    <div class="project-info">
+                        <h4>Chicken Profit Calculator</h4>
+                        <p>A specialized business intelligence tool for poultry farmers to analyze profitability and optimize operations. Features real-time calculations and data visualization for informed decision-making.</p>
+                        <a href="https://chicken-profit-calculator.vercel.app/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Chicken Feed Calculator -->
+                <div class="project-card">
+                    <img src="fc1.png" alt="Chicken Feed Calculator" class="project-image">
+                    <div class="project-info">
+                        <h4>Chicken Feed Calculator</h4>
+                        <p>An essential nutritional planning tool for poultry operations. Helps farmers calculate optimal feed ratios and costs with precision, ensuring healthy flocks and efficient resource management.</p>
+                        <a href="https://chicken-feed-calculator-abl.vercel.app/" class="project-btn" target="_blank" rel="noopener">
+                            <span>View Project →</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Start Your Project?</h2>
+            <p>Let's bring your vision to life with cutting-edge web solutions that drive results and captivate your audience.</p>
+            <a href="https://www.lalowebagency.biz/" class="cta-btn" target="_blank" rel="noopener">
+                <span>Get Started Today →</span>
+            </a>
+        </section>
+    </div>
+
+    <script>
+        // ============================================
+        // CUSTOM CURSOR
+        // ============================================
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover effects
+        const interactives = document.querySelectorAll('a, button, .project-btn, .cta-btn');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ============================================
+        // LOADING BAR
+        // ============================================
+        window.addEventListener('load', () => {
+            const loadBar = document.getElementById('loadBar');
+            loadBar.style.width = '100%';
+            setTimeout(() => {
+                loadBar.style.opacity = '0';
+            }, 500);
+        });
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('loadBar').style.width = scrolled + '%';
+            document.getElementById('loadBar').style.opacity = '1';
+        });
+
+        // ============================================
+        // ADAPTIVE PARTICLE SYSTEM
+        // ============================================
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        let particles = [];
+        const particleCount = isMobile ? 50 : 150;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 255, 204, 0.8)' : 'rgba(255, 0, 255, 0.8)';
+            }
+
+            update() {
+                if (!isMobile) {
+                    // Desktop: particles attracted to cursor
+                    const dx = mouseX - this.x;
+                    const dy = mouseY - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 200) {
+                        const force = (200 - distance) / 200;
+                        this.speedX += (dx / distance) * force * 0.1;
+                        this.speedY += (dy / distance) * force * 0.1;
+                    }
+                }
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Friction
+                this.speedX *= 0.98;
+                this.speedY *= 0.98;
+
+                // Boundaries
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+                // Keep within bounds
+                this.x = Math.max(0, Math.min(canvas.width, this.x));
+                this.y = Math.max(0, Math.min(canvas.height, this.y));
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(0, 255, 204, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            if (!isMobile) {
+                connectParticles();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        // Mobile: Random particle movement
+        if (isMobile) {
+            setInterval(() => {
+                particles.forEach(p => {
+                    p.speedX = (Math.random() - 0.5) * 2;
+                    p.speedY = (Math.random() - 0.5) * 2;
+                });
+            }, 3000);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        // ============================================
+        // PARALLAX SCROLL EFFECTS (Only for about card)
+        // ============================================
+        const parallaxElements = document.querySelectorAll('.card[data-parallax]');
+        
+        window.addEventListener('scroll', () => {
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-parallax'));
+                const rect = el.getBoundingClientRect();
+                const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+                const yPos = scrollPercent * speed * 100;
+                el.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // ============================================
+        // INTERSECTION OBSERVER FOR FADE-IN
+        // ============================================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    // Add a slight delay for staggered effect
+                    const delay = entry.target.classList.contains('project-card') ? 
+                        Array.from(entry.target.parentElement.children).indexOf(entry.target) * 150 : 0;
+                    
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, delay);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.card, .project-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ============================================
+        // PREVENT MOBILE SCROLL ISSUES
+        // ============================================
+        if (isMobile) {
+            document.body.style.cursor = 'auto';
+        }
+    </script>
+</body>
+</html>
